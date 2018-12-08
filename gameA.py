@@ -61,6 +61,11 @@ def dispGameA():
     maxAmb = 12
     maxEnergy = 20
 
+    emptyField = True #Whether any enemies are on your side of the field
+
+    FPS = 60
+    clock = time.Clock()
+
     while running:
         leftClick, middleClick, rightClick = False, False, False
         scroll = 0
@@ -73,10 +78,8 @@ def dispGameA():
                 if action.button == 1:
                     leftClick = True
 
-        for b in bList:
-            if b.mouseover:
-                break
-        else:
+        #"buying" troops
+        if not any([b.mouseover for b in bList]):
             if leftClick:
                 curSRect = None
                 if curSelected is not None and energy >= curSelected.cost:
@@ -84,16 +87,26 @@ def dispGameA():
                     energy -= curSelected.cost
                     curSelected = None
 
+        emptyField = not any(enemy.y > 360 for enemy in enemyList)
+
+        #ACCESS SPREADSHEET IN SOMEWAY TO FIND IF ENEMY SUMMONED TROOPS
+        #ALSO PUT OWN TROOPS INTO SHEET FOR ENEMY TO ACCESS
+        #AT THIS SPOT
 
 
+
+        #Updates which troop is currently selected
         if BRect.clicked:
             curSRect = TRectR
             #curSelected = RectangleT()
         elif BTri.clicked:
             curSRect = TTriR
+            #curSelected = RectangleT()
         elif BPent.clicked:
             curSRect = TPentR
+            #curSelected = RectangleT()
 
+        #This is where all graphics are displayed and run
         screen.fill((0, 0, 0))
         if curSRect is not None:
             draw.rect(screen, (0, 200, 0), curSRect, 5)
@@ -105,4 +118,6 @@ def dispGameA():
             draw.circle(screen, (150, 55, 250), (1060, 700 - 35*c), 15, 4)
 
         display.flip()
+        clock.tick(FPS)
+
     quit()
