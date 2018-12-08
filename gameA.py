@@ -6,7 +6,7 @@ from random import *
 from systems import *
 from troops import *
 
-WIDTH, HEIGHT = 1080, 720
+WIDTH, HEIGHT = 1440, 720
 
 screen = display.set_mode((WIDTH, HEIGHT))
 
@@ -38,24 +38,24 @@ def drawTPent2(screen, r):
 
 def dispGameA():
     # Screen info
-    WIDTH, HEIGHT = 1080, 720
+    WIDTH, HEIGHT = 1440, 720
     screen = display.set_mode((WIDTH, HEIGHT))
     running = True
 
     #Buttons
-    TRectR = Rect(10, 270, 80, 80)
+    TRectR = Rect(270, 10, 80, 80)
     BRect = Button(TRectR, drawTRect, drawTRect2, screen)
-    TTriR = Rect(10, 360, 80, 80)
+    TTriR = Rect(360, 10, 80, 80)
     BTri = Button(TTriR, drawTTri, drawTTri2, screen)
-    TPentR = Rect(10, 450, 80, 80)
+    TPentR = Rect(450, 10, 80, 80)
     BPent = Button(TPentR, drawTPent, drawTPent2, screen)
 
     bList = [BRect, BTri, BPent]
     curSelected = None
     curSRect = None
 
-    allyList = []
-    enemyList = []
+    allyList = [Base("A")]
+    enemyList = [Base("B")]
 
     energy = 20
     maxAmb = 12
@@ -82,12 +82,12 @@ def dispGameA():
         if not any([b.mouseover for b in bList]):
             if leftClick:
                 curSRect = None
-                if curSelected is not None and energy >= curSelected.cost:
+                if curSelected is not None and mousePos[0] < 720 and energy >= curSelected.cost:
                     allyList.append(curSelected)
                     energy -= curSelected.cost
                     curSelected = None
 
-        emptyField = not any(enemy.y > 360 for enemy in enemyList)
+        emptyField = not any(enemy.y < 720 for enemy in enemyList)
 
         #ACCESS SPREADSHEET IN SOMEWAY TO FIND IF ENEMY SUMMONED TROOPS
         #ALSO PUT OWN TROOPS INTO SHEET FOR ENEMY TO ACCESS
@@ -108,14 +108,18 @@ def dispGameA():
 
         #This is where all graphics are displayed and run
         screen.fill((0, 0, 0))
+        for a in allyList:
+            a.draw(screen)
+        for e in enemyList:
+            e.draw(screen)
         if curSRect is not None:
             draw.rect(screen, (0, 200, 0), curSRect, 5)
         for b in bList:
             b.getClick(mousePos, leftClick)
             b.update()
-        draw.rect(screen, (255, 255, 255), (1040, -10, 50, 1200), 3)
+        draw.rect(screen, (255, 255, 255), (-10, 670, 840, 80), 3)
         for c in range(energy):
-            draw.circle(screen, (150, 55, 250), (1060, 700 - 35*c), 15, 4)
+            draw.circle(screen, (150, 55, 250), (30 + 40*c, 700), 15, 4)
 
         display.flip()
         clock.tick(FPS)
