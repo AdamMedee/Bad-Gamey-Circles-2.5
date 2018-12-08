@@ -1,36 +1,38 @@
-#main menu screen
+#diifferent things that can be summoned
 
 from pygame import *
 from math import *
 from random import *
 from systems import *
 
+WIDTH, HEIGHT = 1080, 720
+
+screen = display.set_mode((WIDTH, HEIGHT))
+
+
 init()
 
-def drawOpt(screen, r):
+
+def drawBack(screen, r):
     draw.rect(screen, (200, 200, 200), r, 0)
-def drawOpt2(screen, r):
+
+
+def drawBack2(screen, r):
     draw.rect(screen, (50, 50, 50), r, 0)
 
-def drawPlay(screen, r):
-    pass
-def drawPlay2(screen, r):
-    pass
 
 
-def dispMenu():
-    #Screen info
+
+def dispGameA():
+    # Screen info
     WIDTH, HEIGHT = 1080, 720
     screen = display.set_mode((WIDTH, HEIGHT))
     running = True
 
-    #Buttons
-    BOptRect = Rect(440, 500, 200, 140)
-    BOptions = Button(BOptRect, drawOpt, drawOpt2, screen)
-    BPlayRect = Rect(440, 250, 200, 140)
-    BPlay = Button(BPlayRect, drawOpt, drawOpt2, screen)
-    bList = [BOptions, BPlay]
-
+    # Buttons
+    BRect = Rect(50, 50, 100, 75)
+    BBack = Button(BRect, drawBack, drawBack2, screen)
+    bList = [BBack]
 
     while running:
         leftClick, middleClick, rightClick = False, False, False
@@ -44,10 +46,8 @@ def dispMenu():
                 if action.button == 1:
                     leftClick = True
 
-        if BOptions.clicked:
-            return "help"
-        elif BPlay.clicked:
-            return "game"
+        if BBack.clicked:
+            return "menu"
 
         for b in bList:
             b.getClick(mousePos, leftClick)
@@ -55,11 +55,3 @@ def dispMenu():
 
         display.flip()
     quit()
-
-
-
-
-
-
-
-
