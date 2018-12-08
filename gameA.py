@@ -16,7 +16,8 @@ client = gspread.authorize(creds)
 
 sheet = client.open("Bad Gamey Circle 2.5").sheet1
 nGames=int(sheet.cell(1,1).value)                    #Number of games that are currently running
-sheet.update_cell(1,1,str(nGames+1))                 #Update the numnber of games that are currently playing
+nGames+=1
+sheet.update_cell(1,1,str(nGames))                 #Update the numnber of games that are currently playing
 
 
 
@@ -52,6 +53,7 @@ def drawTPent2(screen, r):
 
 
 def dispGameA():
+    global nGames
     # Screen info
     WIDTH, HEIGHT = 1440, 720
     screen = display.set_mode((WIDTH, HEIGHT))
@@ -89,7 +91,8 @@ def dispGameA():
             if action.type == QUIT:
                 running = False
                 print("GARU")
-                sheet.update_cell(1, 1, str(nGames - 1))
+                nGames -=1
+                sheet.update_cell(1, 1, str(nGames))
 
                 break
             elif action.type == MOUSEBUTTONDOWN:
