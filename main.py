@@ -1,6 +1,7 @@
 #layout of actual game and things run
 from __future__ import print_function
 from menu import *
+from help import *
 from math import *
 from random import *
 from googleapiclient.discovery import build
@@ -15,10 +16,10 @@ curScreen = "menu" #menu, help, game, and end
 while running:
 
     if curScreen == "menu":
-        dispMenu()
+        curScreen = dispMenu()
 
     elif curScreen == "help":
-        pass
+        curScreen = dispOptions()
 
     elif curScreen == "game":
         pass
@@ -27,9 +28,9 @@ while running:
         pass
 
     else:
-        print("???")
+        running = False
 
-    display.flip()
+
 quit()
 
 

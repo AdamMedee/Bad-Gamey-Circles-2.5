@@ -12,6 +12,11 @@ def drawOpt(screen, r):
 def drawOpt2(screen, r):
     draw.rect(screen, (50, 50, 50), r, 0)
 
+def drawPlay(screen, r):
+    pass
+def drawPlay2(screen, r):
+    pass
+
 
 def dispMenu():
     #Screen info
@@ -20,8 +25,10 @@ def dispMenu():
     running = True
 
     #Buttons
-    BRect = Rect(440, 300, 200, 140)
-    BOptions = Button(BRect, drawOpt, drawOpt2, screen)
+    BOptRect = Rect(440, 500, 200, 140)
+    BOptions = Button(BOptRect, drawOpt, drawOpt2, screen)
+    BPlayRect = Rect(440, 250, 200, 140)
+    BPlay = Button(BPlayRect, drawOpt, drawOpt2, screen)
     bList = [BOptions]
 
 
@@ -33,6 +40,12 @@ def dispMenu():
             if action.type == QUIT:
                 running = False
                 break
+            elif action.type == MOUSEBUTTONDOWN:
+                if action.button == 1:
+                    leftClick = True
+
+        if BOptions.clicked:
+            return "help"
 
         for b in bList:
             b.getClick(mousePos, leftClick)
