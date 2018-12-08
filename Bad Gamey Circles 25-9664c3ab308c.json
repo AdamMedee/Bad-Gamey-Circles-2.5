@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "bad-gamey-circles-25",
+  "private_key_id": "9664c3ab308c6f488a1cd7c5a0565412db4239b2",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDCfOVFB1n5rmXS\ngxmvpTbNqXp/OIZ0Zk4Z0AS9mZruH4kSxt7koVa4n14WIZMAPLEFhVMVzbG8c6po\nLA+Uwc8tUlWpNjKuIZKN1oqRkl+0/jX6JK7VrAeEi9aBSeMODOKNyYO33G7ezhZa\nzWrs+SqveHJItStbnB5FoRe8OnB99n08WmMDmuK5JFxOIewqDffdewPecZIE6JHF\nt0ILNtIUBX61r5caLN7j3PcBrNhl2aeCIY8X2FfDrqeBMy78wLnMnghsAup9roq5\nIiDlIR1qlxH4FFfbDrcY9bFFrFpiXJManKMAH8BJBJSDnYcBgQc8ZUy4T+iZdL6Z\nRbpSxs8dAgMBAAECggEAMeni32XlGha/jBjYWUNB/uM9jHQB0dLFvYstBEntQKq4\nP6jpYGzluEkyWOSx+PAakGuoqKJbOJ3IwKZ6MzfQR3XnhR9jP1xfY+aJNpYF2Qoa\n6UFL24ukfEh1O0Yurxbwd+odU20PyT/D7fblN780zMbRMcbJQ2AcRstyr3yiDTlo\nXUg/gkD45MzSsvs31JNPowJ3bkt7rrTPhrsODGaOB87KiK+Ceg1OvccAxVu024Ap\nb6SqVcr0bgEuHb6QdBQ2rjbpANZIX9B+CGQyRZnhh2lhpqCzlt+wBkV+Vgy5Wu56\nHYNax3ffwNGAI5F5crXZ2FTgYWCbPKlaHUX0Qta04wKBgQDhzycLfWowz6CeXegy\n/2dBs8Tjw0VPKPoVyWnHx7vi57+Efo78mq8jGrK+63SMUSB57ZyzcZXViCz9psVf\ngg5054xJI6EZEuG0YWL3iC/u1XN40PO3AohxV/i0mKeAc+Zo6BB8lcYCDBaIUQIk\nyPdmsBVTbmL3s0Ca68vdTokoSwKBgQDcfbKiLiu3NGk6XFpIXREVe80d5SwQS0D/\nkrmTkXfWhJe0tivuweLM4nkHnKHBmjLX8BF8y99ntiLFF2JO9K+AroaJsBb52UmK\nYxE2YS29+ENyMDtEsz7WQdoKDc/2NWv5WvFkU8TK6ef7owX42shnKBzp47KfSIDi\nWYLxGmMVNwKBgDHs9TsLHaFxJpgdNyufYJscPhoFoJth+fk7MRIkzRvcFXIb8U1U\nfgiK7J5dvMURYtbSfGUIZhJyK1BhwR3eyYd7cn7xS7sZe6HALnuANujddMxvlpMO\nElDNHIYBgndaKMVlGdAR5VeqiIjXMFwlut2PbQenTmZp0YzvOYHSzWyFAoGAU0j7\nl70e8CXQ9aV6yMi2sknAMeGl4kW6uI8AoBgbjyEoeK8zKw17kO6eztxAUXPgbqaU\nxHHx4ifvPElX7gEI5e+GjC3Cj/+egrJnBwZwE8jaGSDU0l9uhdn79T5AZnzJWzgZ\n5E6sEAWIhgmPMO/bMPP67/H9P6NQY69yAYZ5FMMCgYEAjQq/4rs8wXg3svXyVrHa\neF+pGrp67B39dZOYRJbHRky0nDl/Ii5LKVgiFcH5v4FE/wR3f4NSurn2kk9OaHE2\ngVlrT4b4ssvlzpJRHqRwDClLFaGofiIibbreFmgm1m2aMSMFqHQ3s6P+m7ruKQ8y\nMsjqi2qXRT9ZSmDQuCStcQE=\n-----END PRIVATE KEY-----\n",
+  "client_email": "gary-932@bad-gamey-circles-25.iam.gserviceaccount.com",
+  "client_id": "103550181850832764162",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/gary-932%40bad-gamey-circles-25.iam.gserviceaccount.com"
+}
