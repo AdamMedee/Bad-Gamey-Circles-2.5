@@ -6,7 +6,22 @@ from random import *
 from systems import *
 from troops import *
 
-WIDTH, HEIGHT = 1440, 720
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+
+scope = ['https://spreadsheets.google.com/feeds',
+         'https://www.googleapis.com/auth/drive']
+creds = ServiceAccountCredentials.from_json_keyfile_name('Bad Gamey Circles 25-9664c3ab308c.json', scope)
+client = gspread.authorize(creds)
+
+sheet = client.open("Bad Gamey Circle 2.5").sheet1
+nGames=int(sheet.cell(1,1).value)                    #Number of games that are currently running
+sheet.update_cell(1,1,str(nGames+1))                 #Update the numnber of games that are currently playing
+
+
+
+
+WIDTH, HEIGHT = 1080, 720
 
 screen = display.set_mode((WIDTH, HEIGHT))
 
@@ -73,6 +88,9 @@ def dispGameA():
         for action in event.get():
             if action.type == QUIT:
                 running = False
+                print("GARU")
+                sheet.update_cell(1, 1, str(nGames - 1))
+
                 break
             elif action.type == MOUSEBUTTONDOWN:
                 if action.button == 1:
