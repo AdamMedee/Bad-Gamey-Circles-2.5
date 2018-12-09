@@ -6,9 +6,7 @@ from gameA import *
 from gameB import *
 from math import *
 from random import *
-from googleapiclient.discovery import build
-from httplib2 import Http
-from oauth2client import file, client, tools
+
 
 running = True
 
