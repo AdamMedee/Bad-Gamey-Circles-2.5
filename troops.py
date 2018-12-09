@@ -142,8 +142,8 @@ class TRectangle:
     def __init__(self, x, y, team):
         self.x = x
         self.y = y
-        self.hp = 40
-        self.rect = Rect(x - 50, y - 25, 100, 50)
+        self.hp = 70
+        self.rect = Rect(x - 50, y - 25, 50, 100)
         self.cooldown = 0
         self.invinc = 0
         self.cost = 5
@@ -161,11 +161,11 @@ class THexagon:
     def __init__(self, x, y, team):
         self.x = x
         self.y = y
-        self.hp = 50
+        self.hp = 40
         self.rect = Rect(x - 50, y - 50, 100, 100)
         self.cooldown = 0
-        self.maxCooldown = 300
-        self.dmg = 20
+        self.maxCooldown = 200
+        self.dmg = 75
         self.invinc = 0
         self.cost = 10
         self.range = 250
@@ -192,6 +192,7 @@ class THexagon:
         self.y += self.speed * sin(ang)
 
     def attack(self, target):
+        self.speed = self.cooldown/300
         if self.cooldown <= 0:
             dx = target.x - self.x
             dy = target.y - self.y
@@ -239,15 +240,16 @@ class TCircle:
     def __init__(self, x, y, team):
         self.x = x
         self.y = y
-        self.hp = 5
+        self.hp = 30
         self.rect = Rect(x - 25, y - 25, 50, 50)
         self.cooldown = 0
-        self.maxCooldown = 120
+        self.maxCooldown = 300
         self.dmg = 10
-        self.range = 100
+        self.range = 300
         self.invinc = []
+        self.bulls=[]
         self.cost = 10
-        self.speed = 3
+        self.speed = 0.7
         self.team = team
         self.col = (0, 0, 255) if team == "A" else (255, 0, 0)
 
@@ -266,13 +268,22 @@ class TCircle:
 
     def attack(self, target):
         if self.cooldown <= 0:
-            target.hp -= self.dmg
+            #target.hp -= self.dmg
             self.cooldown = self.maxCooldown
+            for i in range(1,50):
+                self.bulls.append([self.x, self.y, 4*cos(360/i), 4*sin(360/i), 100])
 
     def update(self, screen, empty, enemyList):
         tx, ty = 0, 0
         m = 999999
         self.cooldown = max(0, self.cooldown - 1)
+        for b in range(len(self.bulls) - 1, -1, -1):
+            self.bulls[b][0] += self.bulls[b][2]
+            self.bulls[b][1] += self.bulls[b][3]
+            self.bulls[b][4] -= 1
+            draw.circle(screen, self.col, (int(self.bulls[b][0]), int(self.bulls[b][1])), 2, 0)
+            if not Rect(0, 0, 1440, 720).collidepoint(self.bulls[b][0], self.bulls[b][1]) or self.bulls[b][4] <= 0:
+                del self.bulls[b]
         target = None
         for enemy in enemyList:
             if hypot(enemy.x - self.x, enemy.y - self.y) < m:
@@ -280,6 +291,11 @@ class TCircle:
                 tx, ty = (enemy.x, enemy.y)
                 if hypot(enemy.x - self.x, enemy.y - self.y) < self.range:
                     self.attack(enemy)
+        for enemy in enemyList:
+            for b in range(len(self.bulls)-1, -1, -1):
+                if enemy.rect.collidepoint(self.bulls[b][0], self.bulls[b][1]):
+                    del self.bulls[b]
+                    enemy.hp -= self.dmg
         if empty:
             if self.team == "A" and self.x < 700:
                 if self.y > 360:
@@ -298,6 +314,7 @@ class TPlus:
         self.hp = 6
         self.maxhp = 6
         self.rect = Rect(x - 25, y - 25, 50, 50)
+        self.dmg = -5
         self.cooldown = 0
         self.invinc = []
         self.cost = 10
@@ -333,13 +350,17 @@ class TKite:
     def __init__(self, x, y, team):
         self.x = x
         self.y = y
-        self.hp = 5
+        self.hp = 55
         self.rect = Rect(x - 25, y - 75, 50, 100)
+        self.dmg = 200
+        self.maxCooldown = 350
         self.cooldown = 0
-        self.invinc = 100
-        self.cost = 18
-        self.speed = 4
+        self.invinc = 0
+        self.cost = 14
+        self.range = 500
+        self.speed = 1
         self.team = team
+        self.bulls = []
         self.col = (0, 0, 255) if team == "A" else (255, 0, 0)
 
     def draw(self, screen):
@@ -356,6 +377,7 @@ class TKite:
         self.y += self.speed * sin(ang)
 
     def attack(self, target):
+        self.speed = self.cooldown/500
         if self.cooldown == 0:
             pass
 
@@ -367,12 +389,12 @@ class TSpinner:
     def __init__(self, x, y, team):
         self.x = x
         self.y = y
-        self.hp = 6
+        self.hp = 20
         self.rect = Rect(x - 30, y - 30, 60, 60)
         self.invinc = []
-        self.dmg = 120
+        self.dmg = 10
         self.cost = 6
-        self.speed = 8
+        self.speed = 5
         self.team = team
         self.col = (0, 0, 255) if team == "A" else (255, 0, 0)
 
