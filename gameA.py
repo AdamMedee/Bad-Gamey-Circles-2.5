@@ -31,26 +31,72 @@ init()
 
 #button graphics
 def drawTRect(screen, r):
-    draw.rect(screen, (0, 0, 255), (r[0]+15, r[1]+15, r[2]-30, r[3]-30), 3)
+    draw.rect(screen, (0, 0, 255), (r[0]+15, r[1]+25, r[2]-30, r[3]-50), 3)
     draw.rect(screen, (150, 150, 150), r, 3)
 def drawTRect2(screen, r):
-    draw.rect(screen, (0, 0, 255), (r[0]+15, r[1]+15, r[2]-30, r[3]-30), 3)
+    draw.rect(screen, (0, 0, 255), (r[0]+15, r[1]+25, r[2]-30, r[3]-50), 3)
     draw.rect(screen, (200, 200, 200), r, 3)
 
 def drawTTri(screen, r):
-    draw.rect(screen, (0, 0, 255), (r[0]+15, r[1]+15, r[2]-30, r[3]-30), 3)
+    draw.polygon(screen, (0, 0, 255), [(r[0] + r[2]//2, r[1]+10), (r[0]+10, r[1]+65), (r[0]+70, r[1]+65)], 3)
     draw.rect(screen, (150, 150, 150), r, 3)
 def drawTTri2(screen, r):
-    draw.rect(screen, (0, 0, 255), (r[0]+15, r[1]+15, r[2]-30, r[3]-30), 3)
+    draw.polygon(screen, (0, 0, 255), [(r[0] + r[2] // 2, r[1] + 10), (r[0] + 10, r[1] + 65), (r[0] + 70, r[1] + 65)], 3)
+    draw.rect(screen, (200, 200, 200), r, 3)
+
+def drawTSquare(screen, r):
+    draw.rect(screen, (0, 0, 255), (r[0] + 15, r[1] + 15, r[2] - 30, r[3] - 30), 3)
+    draw.rect(screen, (150, 150, 150), r, 3)
+def drawTSquare2(screen, r):
+    draw.rect(screen, (0, 0, 255), (r[0] + 15, r[1] + 15, r[2] - 30, r[3] - 30), 3)
     draw.rect(screen, (200, 200, 200), r, 3)
 
 def drawTPent(screen, r):
-    draw.rect(screen, (0, 0, 255), (r[0]+15, r[1]+15, r[2]-30, r[3]-30), 3)
+    draw.polygon(screen, (0, 0, 255), [(r[0] + 10, r[1]+40), (r[0]+40, r[1]+10),
+                                    (r[0]+70, r[1]+40), (r[0] + 60, r[1] + 70), (r[0]+20, r[1] + 70)], 3)
     draw.rect(screen, (150, 150, 150), r, 3)
 def drawTPent2(screen, r):
-    draw.rect(screen, (0, 0, 255), (r[0]+15, r[1]+15, r[2]-30, r[3]-30), 3)
+    draw.polygon(screen, (0, 0, 255), [(r[0] + 10, r[1] + 40), (r[0] + 40, r[1] + 10),
+                                       (r[0] + 70, r[1] + 40), (r[0] + 60, r[1] + 70), (r[0] + 20, r[1] + 70)], 3)
     draw.rect(screen, (200, 200, 200), r, 3)
 
+def drawTHouse(screen, r):
+    draw.polygon(screen, (0, 0, 255), [(r[0] + 10, r[1] + 40), (r[0] + 40, r[1] + 10),
+                                       (r[0] + 70, r[1] + 40), (r[0] + 70, r[1] + 70),
+                                       (r[0] + 10, r[1] + 70)], 3)
+    draw.rect(screen, (150, 150, 150), r, 3)
+def drawTHouse2(screen, r):
+    draw.polygon(screen, (0, 0, 255), [(r[0]+10, r[1]+40), (r[0]+40, r[1]+10),
+                                    (r[0]+70, r[1]+40), (r[0]+70, r[1]+70),
+                                    (r[0]+10, r[1]+70)], 3)
+    draw.rect(screen, (200, 200, 200), r, 3)
+
+def drawTHex(screen, r):
+    draw.polygon(screen, (0, 0, 255), [(r[0] + 20, r[1] + 5), (r[0] + 60, r[1] + 5), (r[0] + 75, r[1] + 40), (r[0] + 60, r[1] + 75), (r[0] + 20, r[1] + 75), (r[0] + 5, r[1] + 40)], 3)
+    draw.rect(screen, (150, 150, 150), r, 3)
+def drawTHex2(screen, r):
+    draw.polygon(screen, (0, 0, 255), [(r[0] + 20, r[1] + 5), (r[0] + 60, r[1] + 5), (r[0] + 75, r[1] + 40), (r[0] + 60, r[1] + 75), (r[0] + 20, r[1] + 75), (r[0] + 5, r[1] + 40)], 3)
+    draw.rect(screen, (200, 200, 200), r, 3)
+
+def drawTCircle(screen, r):
+    draw.circle(screen, (0, 0, 255), (r[0]+40, r[1]+40), 30, 3)
+    draw.rect(screen, (150, 150, 150), r, 3)
+def drawTCircle2(screen, r):
+    draw.circle(screen, (0, 0, 255), (r[0] + 40, r[1] + 40), 30, 3)
+    draw.rect(screen, (200, 200, 200), r, 3)
+
+def drawTSpin(screen, r):
+    draw.polygon(screen, (0, 0, 255), [(r[0] + 30, r[1] - 10), (r[0], r[1] + 5),
+                    (r[0] + 10, r[1] + 30), (r[0] + 50, r[1]),
+                    (r[0] + 10, r[1] + 50), (r[0], r[1] + 75),
+                    (r[0] - 10, r[1] + 50), (r[0] + 5, r[1])], 3)
+    draw.rect(screen, (150, 150, 150), r, 3)
+def drawTSpin2(screen, r):
+    draw.polygon(screen, (0, 0, 255), [(r[0] + 30, r[1] - 10), (r[0], r[1] + 5),
+                    (r[0] + 10, r[1] + 30), (r[0] + 50, r[1]),
+                    (r[0] + 10, r[1] + 50), (r[0], r[1] + 75),
+                    (r[0] - 10, r[1] + 50), (r[0] + 5, r[1])], 3)
+    draw.rect(screen, (200, 200, 200), r, 3)
 
 def dispGameA():
     global nGames
@@ -60,21 +106,41 @@ def dispGameA():
     running = True
 
     #Buttons
-    TRectR = Rect(270, 10, 80, 80)
+    TRectR = Rect(10, 10, 80, 80)
     BRect = Button(TRectR, drawTRect, drawTRect2, screen)
-    TTriR = Rect(360, 10, 80, 80)
+    TTriR = Rect(100, 10, 80, 80)
     BTri = Button(TTriR, drawTTri, drawTTri2, screen)
-    TPentR = Rect(450, 10, 80, 80)
+    TSquareR = Rect(190, 10, 80, 80)
+    BSquare = Button(TSquareR, drawTSquare, drawTSquare2, screen)
+    THexR = Rect(280, 10, 80, 80)
+    BHex = Button(THexR, drawTHex, drawTHex2, screen)
+    TSpinR = Rect(370, 10, 80, 80)
+    BSpin = Button(TSpinR, drawTSpin, drawTSpin2, screen)
+    TArrowR = Rect(460, 10, 80, 80)
+    #BArrow = Button()
+    TCircleR = Rect(550, 10, 80, 80)
+    BCircle = Button(TCircleR, drawTCircle, drawTCircle2, screen)
+    THouseR = Rect(640, 10, 80, 80)
+    BHouse = Button(THouseR, drawTHouse, drawTHouse2, screen)
+    TLineR = Rect(730, 10, 80, 80)
+    #BLine = Button()
+    TPentR = Rect(820, 10, 80, 80)
     BPent = Button(TPentR, drawTPent, drawTPent2, screen)
+    TStarR = Rect(910, 10, 80, 80)
+    #BStar = Button()
+    TPlusR = Rect(1000, 10, 80, 80)
+    #BPlus = Button()
 
-    bList = [BRect, BTri, BPent]
+
+
+    bList = [BRect, BTri, BPent, BHouse, BSquare, BHex, BCircle, BSpin]
     curSelected = None
     curSRect = None
 
     allyList = [Base("A")]
-    enemyList = [Base("B")]
+    enemyList = [Base("B"), TTriangle(1100, 200, "B")]
 
-    energy = 20
+    energy = 12
     maxAmb = 12
     maxEnergy = 20
 
@@ -82,7 +148,7 @@ def dispGameA():
 
     FPS = 60
     clock = time.Clock()
-
+    nextEng = 180
     while running:
         leftClick, middleClick, rightClick = False, False, False
         scroll = 0
@@ -90,10 +156,8 @@ def dispGameA():
         for action in event.get():
             if action.type == QUIT:
                 running = False
-                print("GARU")
                 nGames -=1
                 sheet.update_cell(1, 1, str(nGames))
-
                 break
             elif action.type == MOUSEBUTTONDOWN:
                 if action.button == 1:
@@ -103,12 +167,30 @@ def dispGameA():
         if not any([b.mouseover for b in bList]):
             if leftClick:
                 curSRect = None
-                if curSelected is not None and mousePos[0] < 720 and energy >= curSelected.cost:
+                if curSelected is not None and mousePos[0] < 720 and energy >= curSelected(0, 0, "A").cost:
+                    curSelected = curSelected(mousePos[0], mousePos[1], "A")
                     allyList.append(curSelected)
                     energy -= curSelected.cost
                     curSelected = None
 
-        emptyField = not any(enemy.y < 720 for enemy in enemyList)
+        emptyField = not any(enemy.x < 720 for enemy in enemyList)
+
+        #Delete dead enemies
+        # Update energy
+        if energy < maxAmb and nextEng <= 0:
+            nextEng = 180
+            energy += 1
+        elif energy < maxAmb:
+            nextEng -= 1
+
+        for i in range(len(allyList)-1, -1, -1):
+            if allyList[i].hp <= 0:
+                del allyList[i]
+        for i in range(len(enemyList)-1, -1, -1):
+            if enemyList[i].hp <= 0:
+                del enemyList[i]
+
+
 
         #ACCESS SPREADSHEET IN SOMEWAY TO FIND IF ENEMY SUMMONED TROOPS
         #ALSO PUT OWN TROOPS INTO SHEET FOR ENEMY TO ACCESS
@@ -119,20 +201,33 @@ def dispGameA():
         #Updates which troop is currently selected
         if BRect.clicked:
             curSRect = TRectR
-            #curSelected = RectangleT()
+            curSelected = TRectangle
         elif BTri.clicked:
             curSRect = TTriR
-            #curSelected = RectangleT()
+            curSelected = TTriangle
+        elif BSquare.clicked:
+            curSRect = TSquareR
+            curSelected = TSquare
         elif BPent.clicked:
             curSRect = TPentR
-            #curSelected = RectangleT()
+            curSelected = TPentagon
+        elif BHex.clicked:
+            curSRect = THexR
+            curSelected = THexagon
+        elif BCircle.clicked:
+            curSRect = TCircleR
+            curSelected = TCircle
+        elif BSpin.clicked:
+            curSRect = TSpinR
+            curSelected = TSpinner
 
         #This is where all graphics are displayed and run
         screen.fill((0, 0, 0))
+
         for a in allyList:
-            a.draw(screen)
+            a.update(screen, emptyField, enemyList)
         for e in enemyList:
-            e.draw(screen)
+            e.update(screen, emptyField, allyList)
         if curSRect is not None:
             draw.rect(screen, (0, 200, 0), curSRect, 5)
         for b in bList:

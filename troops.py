@@ -5,51 +5,29 @@ from math import *
 from random import *
 
 
-class Triangle:
-    def __init__(self, x, y, team):
-        self.x = x
-        self.y = y
-        self.hp = 5
-        self.rect = Rect(x - 25, y - 25, 50, 50)
-        self.cooldown = 0
-        self.invinc = 100
-        self.cost = 2
-        self.speed = 5
-        self.team = team
-
-    def draw(self, screen):
-        draw.polygon(screen, (0, 0, 255),
-                     [(self.x - 25, self.y + 25), (self.x + 25, self.y + 25), (self.x, self.y - 25)])
-
-    def move(self, tx, ty):
-        dx = tx - self.x
-        dy = ty - self.y
-        ang = atan2(dy, dx)
-        self.x += self.speed * cos(ang)
-        self.y += self.speed * sin(ang)
-
-    def attack(self, target):
-        if self.cooldown == 0:
-            pass
-
-    def update(self, screen, tx, ty, enemyList):
-        self.move(tx, ty)
-
-
-class Square:
+class TTriangle:
     def __init__(self, x, y, team):
         self.x = x
         self.y = y
         self.hp = 10
+        self.maxhp = 10
+        self.dmg = 4
         self.rect = Rect(x - 25, y - 25, 50, 50)
         self.cooldown = 0
-        self.invinc = 0
-        self.cost = 3
+        self.maxCooldown = 100
+        self.invinc = []
+        self.bulls = []
+        self.cost = 2
         self.speed = 4
         self.team = team
+        self.range = 200
+        self.col = (0, 0, 255) if team == "A" else (255, 0, 0)
 
     def draw(self, screen):
-        draw.rect(screen, (0, 255, 0), self.rect)
+        col = (self.col[0] * (self.cooldown / self.maxCooldown), self.col[1] * (self.cooldown / self.maxCooldown),self.col[2] * (self.cooldown / self.maxCooldown))
+        draw.polygon(screen, col, [(self.x - 25, self.y + 25), (self.x + 25, self.y + 25), (self.x, self.y - 25)],0)
+        draw.polygon(screen, self.col, [(self.x - 25, self.y + 25), (self.x + 25, self.y + 25), (self.x, self.y - 25)], 4)
+
 
     def move(self, tx, ty):
         dx = tx - self.x
@@ -57,49 +35,154 @@ class Square:
         ang = atan2(dy, dx)
         self.x += self.speed * cos(ang)
         self.y += self.speed * sin(ang)
+        self.rect = Rect(self.x - 25, self.y - 25, 50, 50)
 
     def attack(self, target):
-        if self.cooldown == 0:
-            pass
+        if self.cooldown <= 0:
+            dx = target.x - self.x
+            dy = target.y - self.y
+            ang = atan2(dy, dx)
+            self.bulls.append([self.x, self.y, 6*cos(ang), 6*sin(ang), 120])
+            self.cooldown = self.maxCooldown
 
-    def update(self, screen, enemyList):
-        pass
+    def update(self, screen, empty, enemyList):
+        self.cooldown = max(0, self.cooldown-1)
+        tx, ty = 0, 0
+        m = 999999
+        target = None
+        for b in range(len(self.bulls) - 1, -1, -1):
+            self.bulls[b][0] += self.bulls[b][2]
+            self.bulls[b][1] += self.bulls[b][3]
+            self.bulls[b][4] -= 1
+            draw.circle(screen, self.col, (int(self.bulls[b][0]), int(self.bulls[b][1])), 4, 0)
+            if not Rect(0, 0, 1440, 720).collidepoint(self.bulls[b][0], self.bulls[b][1]) or self.bulls[b][4] <= 0:
+                del self.bulls[b]
+        for enemy in enemyList:
+            for b in range(len(self.bulls)-1, -1, -1):
+                if hypot(self.bulls[b][0]-enemy.x, self.bulls[b][1]-enemy.y) < 4:
+                    del self.bulls[b]
+                    enemy.hp -= self.dmg
+            if hypot(enemy.x - self.x, enemy.y - self.y) < m:
+                m = hypot(enemy.x - self.x, enemy.y - self.y)
+                tx, ty = (enemy.x, enemy.y)
+                if hypot(enemy.x - self.x, enemy.y - self.y) < self.range:
+                    target = enemy
+        if target is not None:
+            self.attack(target)
+        if empty:
+            if self.team == "A" and self.x < 700:
+                if self.y > 360:
+                    tx, ty = 705, 480
+                else:
+                    tx, ty = 705, 240
+        if target is None:
+            self.move(tx, ty)
+        self.draw(screen)
 
+
+class TSquare:
+    def __init__(self, x, y, team):
+        self.x = x
+        self.y = y
+        self.hp = 15
+        self.maxhp = 15
+        self.rect = Rect(x - 25, y - 25, 50, 50)
+        self.cooldown = 0
+        self.maxCooldown = 120
+        self.dmg = 6
+        self.invinc = 0
+        self.cost = 3
+        self.speed = 3
+        self.team = team
+        self.col = (0, 0, 255) if team == "A" else (255, 0, 0)
+
+    def draw(self, screen):
+        col = (self.col[0] * (self.cooldown / self.maxCooldown), self.col[1] * (self.cooldown / self.maxCooldown),
+               self.col[2] * (self.cooldown / self.maxCooldown))
+        draw.rect(screen, col, self.rect, 0)
+        draw.rect(screen, self.col, self.rect, 3)
+
+    def move(self, tx, ty):
+        dx = tx - self.x
+        dy = ty - self.y
+        ang = atan2(dy, dx)
+        self.x += self.speed * cos(ang)
+        self.y += self.speed * sin(ang)
+        self.rect = Rect(self.x - 25, self.y - 25, 50, 50)
+
+    def attack(self, target):
+        if self.cooldown <= 0:
+            target.hp -= self.dmg
+            self.cooldown = self.maxCooldown
+
+    def update(self, screen, empty, enemyList):
+        tx, ty = 0, 0
+        m = 999999
+        self.cooldown = max(0, self.cooldown - 1)
+        target = None
+        for enemy in enemyList:
+            if hypot(enemy.x - self.x, enemy.y - self.y) < m:
+                m = hypot(enemy.x - self.x, enemy.y - self.y)
+                tx, ty = (enemy.x, enemy.y)
+                if enemy.rect.colliderect(self.rect):
+                    target = enemy
+        if target is not None:
+            self.attack(target)
+        if empty:
+            if self.team == "A" and self.x < 700:
+                if self.y > 360:
+                    tx, ty = 705, 480
+                else:
+                    tx, ty = 705, 240
+        if target is None:
+            self.move(tx, ty)
+        self.draw(screen)
 
 class TRectangle:
     def __init__(self, x, y, team):
         self.x = x
         self.y = y
-        self.hp = 100
+        self.hp = 40
         self.rect = Rect(x - 50, y - 25, 100, 50)
         self.cooldown = 0
         self.invinc = 0
         self.cost = 5
         self.team = team
+        self.col = (0, 0, 255) if team == "A" else (255, 0, 0)
 
     def draw(self, screen):
-        draw.rect(screen, (255, 0, 0), self.rect)
+        draw.rect(screen, self.col, self.rect, 3)
 
-    def update(self, screen):
-        pass
+    def update(self, screen, empty, enemyList):
+        self.draw(screen)
 
 
-class Hexagon:
+class THexagon:
     def __init__(self, x, y, team):
         self.x = x
         self.y = y
         self.hp = 50
         self.rect = Rect(x - 50, y - 50, 100, 100)
         self.cooldown = 0
+        self.maxCooldown = 300
+        self.dmg = 20
         self.invinc = 0
-        self.cost = 15
+        self.cost = 10
+        self.range = 250
         self.speed = 1
         self.team = team
+        self.bulls = []
+        self.col = (0, 0, 255) if team == "A" else (255, 0, 0)
 
     def draw(self, screen):
-        draw.polygon(screen, (255, 255, 255),
+        col = (self.col[0] * (self.cooldown / self.maxCooldown), self.col[1] * (self.cooldown / self.maxCooldown),
+               self.col[2] * (self.cooldown / self.maxCooldown))
+        draw.polygon(screen, col,
                      [(self.x - 25, self.y - 50), (self.x + 25, self.y - 50), (self.x + 50, self.y),
-                      (self.x + 25, self.y + 50), (self.x - 25, self.y + 50), (self.x - 50, self.y)])
+                      (self.x + 25, self.y + 50), (self.x - 25, self.y + 50), (self.x - 50, self.y)], 0)
+        draw.polygon(screen, self.col,
+                     [(self.x - 25, self.y - 50), (self.x + 25, self.y - 50), (self.x + 50, self.y),
+                      (self.x + 25, self.y + 50), (self.x - 25, self.y + 50), (self.x - 50, self.y)], 3)
 
     def move(self, tx, ty):
         dx = tx - self.x
@@ -109,27 +192,70 @@ class Hexagon:
         self.y += self.speed * sin(ang)
 
     def attack(self, target):
-        if self.cooldown == 0:
-            pass
+        if self.cooldown <= 0:
+            dx = target.x - self.x
+            dy = target.y - self.y
+            ang = atan2(dy, dx)
+            self.bulls.append([self.x+5*sin(ang), self.y, 6*cos(ang)+5*cos(ang), 6*sin(ang), 120])
+            self.bulls.append([self.x - 5 * sin(ang), self.y, 6 * cos(ang) + 5 - cos(ang), 6 * sin(ang), 120])
+            self.cooldown = self.maxCooldown
 
-    def update(self, screen, enemyList):
-        pass
+    def update(self, screen, empty, enemyList):
+        self.cooldown = max(0, self.cooldown - 1)
+        tx, ty = 0, 0
+        m = 999999
+        target = None
+        for b in range(len(self.bulls) - 1, -1, -1):
+            self.bulls[b][0] += self.bulls[b][2]
+            self.bulls[b][1] += self.bulls[b][3]
+            self.bulls[b][4] -= 1
+            draw.circle(screen, self.col, (int(self.bulls[b][0]), int(self.bulls[b][1])), 4, 0)
+            if not Rect(0, 0, 1440, 720).collidepoint(self.bulls[b][0], self.bulls[b][1]) or self.bulls[b][4] <= 0:
+                del self.bulls[b]
+        for enemy in enemyList:
+            for b in range(len(self.bulls)-1, -1, -1):
+                if enemy.rect.collidepoint(self.bulls[b][0], self.bulls[b][1]):
+                    del self.bulls[b]
+                    enemy.hp -= self.dmg
+            if hypot(enemy.x - self.x, enemy.y - self.y) < m:
+                m = hypot(enemy.x - self.x, enemy.y - self.y)
+                tx, ty = (enemy.x, enemy.y)
+                if hypot(enemy.x - self.x, enemy.y - self.y) < self.range:
+                    target = enemy
+        if target is not None:
+            self.attack(target)
+        if empty:
+            if self.team == "A" and self.x < 700:
+                if self.y > 360:
+                    tx, ty = 705, 480
+                else:
+                    tx, ty = 705, 240
+        if target is None:
+            self.move(tx, ty)
+        self.draw(screen)
 
 
-class Circle:
+class TCircle:
     def __init__(self, x, y, team):
         self.x = x
         self.y = y
         self.hp = 5
         self.rect = Rect(x - 25, y - 25, 50, 50)
         self.cooldown = 0
-        self.invinc = 100
-        self.cost = 15
-        self.speed = 6
+        self.maxCooldown = 120
+        self.dmg = 10
+        self.range = 100
+        self.invinc = []
+        self.cost = 10
+        self.speed = 3
         self.team = team
+        self.col = (0, 0, 255) if team == "A" else (255, 0, 0)
 
     def draw(self, screen):
-        draw.circle(screen, (100, 100, 100), (self.x, self.y), 25)
+        col = (self.col[0] * (self.cooldown / self.maxCooldown), self.col[1] * (self.cooldown / self.maxCooldown),
+               self.col[2] * (self.cooldown / self.maxCooldown))
+        draw.circle(screen, col, (int(self.x), int(self.y)), 25, 0)
+        draw.circle(screen, self.col, (int(self.x), int(self.y)), 25, 3)
 
     def move(self, tx, ty):
         dx = tx - self.x
@@ -139,27 +265,50 @@ class Circle:
         self.y += self.speed * sin(ang)
 
     def attack(self, target):
-        if self.cooldown == 0:
-            pass
+        if self.cooldown <= 0:
+            target.hp -= self.dmg
+            self.cooldown = self.maxCooldown
 
-    def update(self, screen, tx, ty, enemyList):
-        self.move(tx, ty)
+    def update(self, screen, empty, enemyList):
+        tx, ty = 0, 0
+        m = 999999
+        self.cooldown = max(0, self.cooldown - 1)
+        target = None
+        for enemy in enemyList:
+            if hypot(enemy.x - self.x, enemy.y - self.y) < m:
+                m = hypot(enemy.x - self.x, enemy.y - self.y)
+                tx, ty = (enemy.x, enemy.y)
+                if hypot(enemy.x - self.x, enemy.y - self.y) < self.range:
+                    self.attack(enemy)
+        if empty:
+            if self.team == "A" and self.x < 700:
+                if self.y > 360:
+                    tx, ty = 705, 480
+                else:
+                    tx, ty = 705, 240
+        if target is None:
+            self.move(tx, ty)
+        self.draw(screen)
 
 
-class Plus:
+class TPlus:
     def __init__(self, x, y, team):
         self.x = x
         self.y = y
-        self.hp = 5
+        self.hp = 6
+        self.maxhp = 6
         self.rect = Rect(x - 25, y - 25, 50, 50)
         self.cooldown = 0
-        self.invinc = 100
+        self.invinc = []
         self.cost = 10
         self.speed = 8
         self.team = team
+        self.col = (0, 0, 255) if team == "A" else (255, 0, 0)
 
     def draw(self, screen):
-        draw.polygon(screen, (100, 35, 200),
+        col = (self.col[0] * (self.cooldown / self.maxCooldown), self.col[1] * (self.cooldown / self.maxCooldown),
+               self.col[2] * (self.cooldown / self.maxCooldown))
+        draw.polygon(screen, self.col,
                      [(self.x - 8, self.y - 25), (self.x + 8, self.y - 25), (self.x + 8, self.y - 8),
                       (self.x + 25, self.y - 8), (self.x + 25, self.y + 8), (self.x + 8, self.y + 8),
                       (self.x + 8, self.y + 25), (self.x - 8, self.y + 25), (self.x - 8, self.y + 8),
@@ -180,7 +329,7 @@ class Plus:
         self.move(tx, ty)
 
 
-class Kite:
+class TKite:
     def __init__(self, x, y, team):
         self.x = x
         self.y = y
@@ -191,9 +340,12 @@ class Kite:
         self.cost = 18
         self.speed = 4
         self.team = team
+        self.col = (0, 0, 255) if team == "A" else (255, 0, 0)
 
     def draw(self, screen):
-        draw.polygon(screen, (50, 200, 150),
+        col = (self.col[0] * (self.cooldown / self.maxCooldown), self.col[1] * (self.cooldown / self.maxCooldown),
+               self.col[2] * (self.cooldown / self.maxCooldown))
+        draw.polygon(screen, self.col,
                      [(self.x - 25, self.y), (self.x, self.y - 75), (self.x + 25, self.y), (self.x, self.y + 25)])
 
     def move(self, tx, ty):
@@ -211,23 +363,24 @@ class Kite:
         self.move(tx, ty)
 
 
-class Spinner:
+class TSpinner:
     def __init__(self, x, y, team):
         self.x = x
         self.y = y
         self.hp = 6
         self.rect = Rect(x - 30, y - 30, 60, 60)
-        self.cooldown = 0
-        self.invinc = 100
+        self.invinc = []
+        self.dmg = 120
         self.cost = 6
-        self.speed = 14
+        self.speed = 8
         self.team = team
+        self.col = (0, 0, 255) if team == "A" else (255, 0, 0)
 
     def draw(self, screen):
-        draw.polygon(screen, (0, 0, 255), [(self.x - 10, self.y - 10), (self.x, self.y - 50),
+        draw.polygon(screen, self.col, [(self.x - 10, self.y - 10), (self.x, self.y - 50),
                                            (self.x + 10, self.y - 10), (self.x + 50, self.y),
                                            (self.x + 10, self.y + 10), (self.x, self.y + 50),
-                                           (self.x - 10, self.y + 10), (self.x - 50, self.y)])
+                                           (self.x - 10, self.y + 10), (self.x - 50, self.y)], 3)
 
     def move(self, tx, ty):
         dx = tx - self.x
@@ -235,16 +388,29 @@ class Spinner:
         ang = atan2(dy, dx)
         self.x += self.speed * cos(ang)
         self.y += self.speed * sin(ang)
+        self.rect = Rect(self.x - 30, self.y - 30, 60, 60)
 
     def attack(self, target):
-        if self.cooldown == 0:
-            pass
+        if self.rect.colliderect(target.rect):
+            target.hp -= self.dmg
+            self.hp = 0
 
-    def update(self, screen, tx, ty, enemyList):
+    def update(self, screen, empty, enemyList):
+        if self.team == "A":
+            if self.x < 700:
+                if self.y > 360:
+                    tx, ty = 705, 480
+                else:
+                    tx, ty = 705, 240
+            else:
+                tx, ty = 1370, 310
+                self.attack(enemyList[0])
+        self.draw(screen)
         self.move(tx, ty)
 
 
-class Pentagon:
+
+class TPentagon:
     def __init__(self, x, y, team):
         self.x = x
         self.y = y
@@ -252,20 +418,23 @@ class Pentagon:
         self.duration = 100
         self.cost = 12
         self.team = team
+        self.col = (0, 0, 255) if team == "A" else (255, 0, 0)
 
     def draw(self, screen):
-        draw.polygon(screen, (0, 0, 255), [(self.x - 50, self.y), (self.x, self.y - 50),
-                                           (self.x + 50, self.y), (self.x + 25, self.y + 50), (self.x - 25, self.y + 50)])
+        col = (self.col[0] * (self.cooldown / self.maxCooldown), self.col[1] * (self.cooldown / self.maxCooldown),
+               self.col[2] * (self.cooldown / self.maxCooldown))
+        draw.polygon(screen, self.col, [(self.x - 50, self.y), (self.x, self.y - 50),
+                                           (self.x + 50, self.y), (self.x + 25, self.y + 50), (self.x - 25, self.y + 50)], 3)
 
     def effect(self, target):
         if self.cooldown == 0:
             pass
 
-    def update(self, screen, tx, ty, enemyList):
-        self.move(tx, ty)
+    def update(self, screen, empty, enemyList):
+        self.draw(screen)
 
 
-class Line:
+class TLine:
     def __init__(self, x, y, team):
         self.x = x
         self.y = y
@@ -273,9 +442,10 @@ class Line:
         self.cost = 3
         self.speed = 8
         self.team = team
+        self.col = (0, 0, 255) if team == "A" else (255, 0, 0)
 
     def draw(self, screen):
-        draw.line(screen, (200, 50, 200), (self.x, self.y - 50), (self.x, self.y + 50))
+        draw.line(screen, self.col, (self.x, self.y - 50), (self.x, self.y + 50))
 
     def move(self):
         self.x += self.speed
@@ -288,7 +458,7 @@ class Line:
         self.move(tx, ty)
 
 
-class Star:
+class TStar:
     def __init__(self, x, y, team):
         self.x = x
         self.y = y
@@ -296,9 +466,12 @@ class Star:
         self.duration = 100
         self.cost = 8
         self.team = team
+        self.col = (0, 0, 255) if team == "A" else (255, 0, 0)
 
     def draw(self, screen):
-        draw.polygon(screen, (0, 0, 255), [(self.x, self.y - 38), (self.x + 13, self.y - 13),
+        col = (self.col[0] * (self.cooldown / self.maxCooldown), self.col[1] * (self.cooldown / self.maxCooldown),
+               self.col[2] * (self.cooldown / self.maxCooldown))
+        draw.polygon(screen, self.col, [(self.x, self.y - 38), (self.x + 13, self.y - 13),
                                            (self.x + 38, self.y - 13), (self.x + 23, self.y + 13),
                                            (self.x + 29, self.y + 38), (self.x, self.y + 23),
                                            (self.x - 29, self.y + 38), (self.x - 23, self.y + 13),
@@ -312,16 +485,19 @@ class Star:
         self.move(tx, ty)
 
 
-class House:
+class THouse:
     def __init__(self, x, y, team):
         self.x = x
         self.y = y
         self.rect = Rect(x - 50, y - 100, 100, 150)
         self.cost = 18
         self.team = team
+        self.col = (0, 0, 255) if team == "A" else (255, 0, 0)
 
     def draw(self, screen):
-        draw.polygon(screen, (0, 0, 255), [(self.x - 50, self.y - 50), (self.x, self.y - 100),
+        col = (self.col[0] * (self.cooldown / self.maxCooldown), self.col[1] * (self.cooldown / self.maxCooldown),
+               self.col[2] * (self.cooldown / self.maxCooldown))
+        draw.polygon(screen, self.col, [(self.x - 50, self.y - 50), (self.x, self.y - 100),
                                            (self.x + 50, self.y - 50), (self.x + 50, self.y + 50),
                                            (self.x - 50, self.y + 50)])
 
@@ -332,27 +508,27 @@ class House:
     def update(self, screen, tx, ty, enemyList):
         self.move(tx, ty)
 
-class base:
+class Base:
     def __init__(self, team):
         if team == "A":
-            self.x = 440
-            self.y = 600
+            self.x = 70
+            self.y = 310
             self.col = (0, 0, 255)
         elif team == "B":
-            self.x = 440
-            self.y = 20
+            self.x = 1370
+            self.y = 310
             self.col = (255, 0, 0)
-        self.rect = (self.x, self.y, 200, 100)
-        self.health = 500
-        self.maxHealth = 500
-        self.healthRect = (self.x + 20, self.y + 40, 160, 20)
+        self.rect = Rect(self.x-50, self.y-100, 100, 200)
+        self.hp = 500
+        self.maxhp = 500
+        self.healthRect = (self.x - 10, self.y - 30, 20, 160)
 
     def draw(self, screen):
         draw.rect(screen, self.col, self.rect, 0)
-        draw.rect(screen, (0, 255, 0), (self.x + 20, self.y + 40, int(160 * (self.health / self.maxHealth)), 20), 0)
-        draw.rect(screen, (50, 100, 50), (self.x + 20, self.y + 40, 160, 20), 0)
+        draw.rect(screen, (0, 255, 0), (self.x - 10, self.y - 80, 20, int(160 * (self.hp / self.maxhp))), 0)
+        draw.rect(screen, (50, 100, 50), (self.x - 10, self.y - 80, 20, 160), 2)
 
-    def update(self, screen):
+    def update(self, screen, empty, enemyList):
         self.draw(screen)
 
 
