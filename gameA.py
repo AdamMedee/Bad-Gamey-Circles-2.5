@@ -5,9 +5,9 @@ from math import *
 from random import *
 from systems import *
 from troops import *
-"""
+
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials 
+from oauth2client.service_account import ServiceAccountCredentials
 
 scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
@@ -15,10 +15,8 @@ creds = ServiceAccountCredentials.from_json_keyfile_name('Bad Gamey Circles 25-9
 client = gspread.authorize(creds)
 
 sheet = client.open("Bad Gamey Circle 2.5").sheet1
-nGames=int(sheet.cell(1,1).value)                    #Number of games that are currently running
-nGames+=1
-sheet.update_cell(1,1,str(nGames))                 #Update the numnber of games that are currently playing
-"""
+
+
 
 
 
@@ -98,7 +96,13 @@ def drawTSpin2(screen, r):
     draw.rect(screen, (200, 200, 200), r, 3)
 
 def dispGameA():
-    global nGames
+    nGames = int(sheet.cell(1, 1).value)  # Number of games that are currently running
+    nGames += 1
+    sheet.update_cell(1, 1, str(nGames))  # Update the numnber of games that are currently playing
+
+
+    str1=sheet.cell(2,1).value
+    print(str1=="")
     # Screen info
     WIDTH, HEIGHT = 1440, 720
     screen = display.set_mode((WIDTH, HEIGHT))
@@ -169,15 +173,6 @@ def dispGameA():
                     allyList.append(curSelected)
                     energy -= curSelected.cost
                     curSelected = None
-                    #add enemy to list
-
-        """
-        if 
-        """
-
-        #ACCESS SPREADSHEET IN SOMEWAY TO FIND IF ENEMY SUMMONED TROOPS
-        #ALSO PUT OWN TROOPS INTO SHEET FOR ENEMY TO ACCESS
-        #AT THIS SPOT
 
         emptyField = not any(enemy.x < 720 for enemy in enemyList)
 
@@ -198,7 +193,9 @@ def dispGameA():
 
 
 
-
+        #ACCESS SPREADSHEET IN SOMEWAY TO FIND IF ENEMY SUMMONED TROOPS
+        #ALSO PUT OWN TROOPS INTO SHEET FOR ENEMY TO ACCESS
+        #AT THIS SPOT
 
 
 
