@@ -28,7 +28,12 @@ while running:
         curScreen = dispOptions()
 
     elif curScreen == "game":
-        # #ach individual user has their own unique id
+        nGames = int(sheet.cell(1, 1).value)  # Number of games that are currently running
+        nGames += 1
+        sheet.update_cell(1, 1, str(nGames))  # Update the number of games opened
+
+
+        # each individual user has their own unique id
         # Determine whether the user is team A or team B (Whoever is first is Team A)
         # Cell (ID,2) stores the status of the user
         row = 2
@@ -37,16 +42,16 @@ while running:
         while sheet.cell(row, 1).value!= "":       #Finding an open game
             if sheet.cell(row,2).value=="A":
                 flag = True
-                print("YES")
+
             row+=200         #Reserve 200 rows for storing data of troops
             ID +=1
         sheet.update_cell(row, 1, str(ID))
         if flag:
-            sheet.update_cell(row, 2, "A")
+            sheet.update_cell(row, 2, "B")
             curScreen = dispGameA()
 
         else:
-            sheet.update_cell(row, 2, "B")
+            sheet.update_cell(row, 2, "A")
             curScreen = dispGameB()
 
 
@@ -54,7 +59,13 @@ while running:
         # curScreen = dispGameA() and dispGameB()
 
     elif curScreen == "end":
-        pass
+
+        # Add delete rows of data
+        # Supports maximum of 5 games opened (200 rows of data per game opened)
+        nGames-=1
+        sheet.update_cell(1,1,str(nGames))
+        break
+
 
     else:
         running = False

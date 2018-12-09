@@ -119,9 +119,7 @@ def drawTSpin2(screen, r):
     draw.rect(screen, (200, 200, 200), r, 3)
 
 def dispGameA():
-    nGames = int(sheet.cell(1, 1).value)  # Number of games that are currently running
-    nGames += 1
-    sheet.update_cell(1, 1, str(nGames))  # Update the numnber of games that are currently playing
+
 
 
     str1=sheet.cell(2,1).value
@@ -182,8 +180,8 @@ def dispGameA():
         for action in event.get():
             if action.type == QUIT:
                 running = False
-                nGames -=1
-                sheet.update_cell(1, 1, str(nGames))
+                return "end"
+
                 break
             elif action.type == MOUSEBUTTONDOWN:
                 if action.button == 1:
