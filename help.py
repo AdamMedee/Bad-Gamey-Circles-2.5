@@ -23,9 +23,10 @@ def dispOptions():
     WIDTH, HEIGHT = 1080, 720
     screen = display.set_mode((WIDTH, HEIGHT))
     running = True
-
+    helpPic = image.load("helppic.png")
+    backPic = image.load("back.png")
     # Buttons
-    BRect = Rect(50, 50, 100, 75)
+    BRect = Rect(40, 20, 110, 85)
     BBack = Button(BRect, drawBack, drawBack2, screen)
     bList = [BBack]
 
@@ -43,10 +44,12 @@ def dispOptions():
 
         if BBack.clicked:
             return "menu"
-
+        screen.blit(helpPic,(50,0))
+        
         for b in bList:
             b.getClick(mousePos, leftClick)
             b.update()
+        screen.blit(backPic,(45,25))
 
         display.flip()
     quit()
