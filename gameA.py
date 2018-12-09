@@ -15,9 +15,7 @@ creds = ServiceAccountCredentials.from_json_keyfile_name('Bad Gamey Circles 25-9
 client = gspread.authorize(creds)
 
 sheet = client.open("Bad Gamey Circle 2.5").sheet1
-nGames=int(sheet.cell(1,1).value)                    #Number of games that are currently running
-nGames+=1
-sheet.update_cell(1,1,str(nGames))                 #Update the numnber of games that are currently playing
+
 
 
 
@@ -121,7 +119,13 @@ def drawTSpin2(screen, r):
     draw.rect(screen, (200, 200, 200), r, 3)
 
 def dispGameA():
-    global nGames
+    nGames = int(sheet.cell(1, 1).value)  # Number of games that are currently running
+    nGames += 1
+    sheet.update_cell(1, 1, str(nGames))  # Update the numnber of games that are currently playing
+
+
+    str1=sheet.cell(2,1).value
+    print(str1=="")
     # Screen info
     WIDTH, HEIGHT = 1440, 720
     screen = display.set_mode((WIDTH, HEIGHT))
