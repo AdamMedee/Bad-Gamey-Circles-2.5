@@ -332,7 +332,7 @@ class House:
     def update(self, screen, tx, ty, enemyList):
         self.move(tx, ty)
 
-class base:
+class Base:
     def __init__(self, team):
         if team == "A":
             self.x = 440
