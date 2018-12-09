@@ -51,7 +51,7 @@ twenty = f.render("20", True, (0, 0, 255))
 
 #button graphics
 def drawTRect(screen, r):
-    screen.blit(five, (r[0]+20, r[1]+10))
+    draw.rect(screen, (0, 0, 255), (r[0]+15, r[1]+25, r[2]-30, r[3]-50), 3)
     draw.rect(screen, (150, 150, 150), r, 3)
 def drawTRect2(screen, r):
     draw.rect(screen, (0, 0, 255), (r[0]+15, r[1]+25, r[2]-30, r[3]-50), 3)
@@ -96,9 +96,7 @@ def drawTSpin2(screen, r):
     draw.rect(screen, (200, 200, 200), r, 3)
 
 def dispGameA():
-    nGames = int(sheet.cell(1, 1).value)  # Number of games that are currently running
-    nGames += 1
-    sheet.update_cell(1, 1, str(nGames))  # Update the numnber of games that are currently playing
+
 
 
     str1=sheet.cell(2,1).value
@@ -149,7 +147,7 @@ def dispGameA():
 
     FPS = 60
     clock = time.Clock()
-    nextEng = 100
+    nextEng = 180
     while running:
         leftClick, middleClick, rightClick = False, False, False
         scroll = 0
@@ -157,8 +155,8 @@ def dispGameA():
         for action in event.get():
             if action.type == QUIT:
                 running = False
-                nGames -=1
-                #sheet.update_cell(1, 1, str(nGames))
+                return "end"
+
                 break
             elif action.type == MOUSEBUTTONDOWN:
                 if action.button == 1:
@@ -179,7 +177,7 @@ def dispGameA():
         #Delete dead enemies
         # Update energy
         if energy < maxAmb and nextEng <= 0:
-            nextEng = 100
+            nextEng = 180
             energy += 1
         elif energy < maxAmb:
             nextEng -= 1
