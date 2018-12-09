@@ -134,6 +134,12 @@ class TSquare:
                     tx, ty = 705, 480
                 else:
                     tx, ty = 705, 240
+            elif self.team == "B" and self.x > 740:
+                if self.y > 360:
+                    tx, ty = 735, 480
+                else:
+                    tx, ty = 735, 240
+
         if target is None:
             self.move(tx, ty)
         self.draw(screen)
@@ -231,6 +237,11 @@ class THexagon:
                     tx, ty = 705, 480
                 else:
                     tx, ty = 705, 240
+            elif self.team == "B" and self.x > 740:
+                if self.y > 360:
+                    tx, ty = 735, 480
+                else:
+                    tx, ty = 735, 240
         if target is None:
             self.move(tx, ty)
         self.draw(screen)
@@ -245,7 +256,7 @@ class TCircle:
         self.cooldown = 0
         self.maxCooldown = 300
         self.dmg = 10
-        self.range = 300
+        self.range = 100
         self.invinc = []
         self.bulls=[]
         self.cost = 10
@@ -271,7 +282,7 @@ class TCircle:
             #target.hp -= self.dmg
             self.cooldown = self.maxCooldown
             for i in range(1,50):
-                self.bulls.append([self.x, self.y, 4*cos(360/i), 4*sin(360/i), 100])
+                self.bulls.append([self.x, self.y, 4*cos(360/i), 4*sin(360/i), 30])
 
     def update(self, screen, empty, enemyList):
         tx, ty = 0, 0
@@ -291,6 +302,7 @@ class TCircle:
                 tx, ty = (enemy.x, enemy.y)
                 if hypot(enemy.x - self.x, enemy.y - self.y) < self.range:
                     self.attack(enemy)
+                    target = enemy
         for enemy in enemyList:
             for b in range(len(self.bulls)-1, -1, -1):
                 if enemy.rect.collidepoint(self.bulls[b][0], self.bulls[b][1]):
@@ -302,6 +314,11 @@ class TCircle:
                     tx, ty = 705, 480
                 else:
                     tx, ty = 705, 240
+            elif self.team == "B" and self.x > 740:
+                if self.y > 360:
+                    tx, ty = 735, 480
+                else:
+                    tx, ty = 735, 240
         if target is None:
             self.move(tx, ty)
         self.draw(screen)
@@ -427,6 +444,15 @@ class TSpinner:
             else:
                 tx, ty = 1370, 310
                 self.attack(enemyList[0])
+        if self.team == "B":
+            if self.x > 740:
+                if self.y > 360:
+                    tx, ty = 735, 480
+                else:
+                    tx, ty = 735, 240
+            else:
+                tx, ty = enemyList[0].x, enemyList[0].y
+
         self.draw(screen)
         self.move(tx, ty)
 

@@ -22,7 +22,7 @@ while running:
         curScreen = dispOptions()
 
     elif curScreen == "game":
-        curScreen = dispGameA() and dispGameB()
+        curScreen = dispGameB() and dispGameB()
 
     elif curScreen == "end":
         pass

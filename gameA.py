@@ -28,6 +28,28 @@ screen = display.set_mode((WIDTH, HEIGHT))
 
 
 init()
+font.init()
+f = font.SysFont("consolas", 60, True)
+one = f.render("1", True, (0, 0, 255))
+two = f.render("2", True, (0, 0, 255))
+three = f.render("3", True, (0, 0, 255))
+four = f.render("4", True, (0, 0, 255))
+five = f.render("5", True, (0, 0, 255))
+six = f.render("6", True, (0, 0, 255))
+seven = f.render("7", True, (0, 0, 255))
+eight = f.render("8", True, (0, 0, 255))
+nine = f.render("9", True, (0, 0, 255))
+ten = f.render("10", True, (0, 0, 255))
+eleven = f.render("11", True, (0, 0, 255))
+twelve = f.render("12", True, (0, 0, 255))
+thirteen = f.render("13", True, (0, 0, 255))
+fourteen = f.render("14", True, (0, 0, 255))
+fifteen = f.render("15", True, (0, 0, 255))
+sixteen = f.render("16", True, (0, 0, 255))
+seventeen = f.render("17", True, (0, 0, 255))
+eighteen = f.render("18", True, (0, 0, 255))
+nineteen = f.render("19", True, (0, 0, 255))
+twenty = f.render("20", True, (0, 0, 255))
 
 #button graphics
 def drawTRect(screen, r):
@@ -37,15 +59,15 @@ def drawTRect2(screen, r):
     draw.rect(screen, (0, 0, 255), (r[0]+15, r[1]+25, r[2]-30, r[3]-50), 3)
     draw.rect(screen, (200, 200, 200), r, 3)
 
-def drawTTri(screen, r):
+def drawTTri2(screen, r):
     draw.polygon(screen, (0, 0, 255), [(r[0] + r[2]//2, r[1]+10), (r[0]+10, r[1]+65), (r[0]+70, r[1]+65)], 3)
     draw.rect(screen, (150, 150, 150), r, 3)
-def drawTTri2(screen, r):
-    draw.polygon(screen, (0, 0, 255), [(r[0] + r[2] // 2, r[1] + 10), (r[0] + 10, r[1] + 65), (r[0] + 70, r[1] + 65)], 3)
+def drawTTri(screen, r):
+    screen.blit(two, (r[0]+25, r[1]+15))
     draw.rect(screen, (200, 200, 200), r, 3)
 
 def drawTSquare(screen, r):
-    draw.rect(screen, (0, 0, 255), (r[0] + 15, r[1] + 15, r[2] - 30, r[3] - 30), 3)
+    screen.blit(three, (r[0] + 25, r[1] + 15))
     draw.rect(screen, (150, 150, 150), r, 3)
 def drawTSquare2(screen, r):
     draw.rect(screen, (0, 0, 255), (r[0] + 15, r[1] + 15, r[2] - 30, r[3] - 30), 3)
@@ -223,6 +245,9 @@ def dispGameA():
 
         #This is where all graphics are displayed and run
         screen.fill((0, 0, 0))
+        draw.rect(screen, (0, 255, 0), (700, 0, 40, 200), 0)
+        draw.rect(screen, (0, 255, 0), (700, 280, 40, 180), 0)
+        draw.rect(screen, (0, 255, 0), (700, 520, 40, 220), 0)
 
         for a in allyList:
             a.update(screen, emptyField, enemyList)
