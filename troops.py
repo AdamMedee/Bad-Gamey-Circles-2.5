@@ -148,7 +148,7 @@ class TRectangle:
     def __init__(self, x, y, team):
         self.x = x
         self.y = y
-        self.hp = 70
+        self.hp = 30
         self.rect = Rect(x - 50, y - 25, 50, 100)
         self.cooldown = 0
         self.invinc = 0
@@ -171,7 +171,7 @@ class THexagon:
         self.rect = Rect(x - 50, y - 50, 100, 100)
         self.cooldown = 0
         self.maxCooldown = 200
-        self.dmg = 75
+        self.dmg = 25
         self.invinc = 0
         self.cost = 12
         self.range = 250
@@ -255,7 +255,7 @@ class TCircle:
         self.rect = Rect(x - 25, y - 25, 50, 50)
         self.cooldown = 0
         self.maxCooldown = 300
-        self.dmg = 10
+        self.dmg = 2
         self.range = 100
         self.invinc = []
         self.bulls=[]
@@ -409,7 +409,7 @@ class TSpinner:
         self.hp = 20
         self.rect = Rect(x - 30, y - 30, 60, 60)
         self.invinc = []
-        self.dmg = 80
+        self.dmg = 30
         self.cost = 6
         self.speed = 8
         self.team = team
@@ -567,8 +567,8 @@ class Base:
             self.y = 310
             self.col = (255, 0, 0)
         self.rect = Rect(self.x-50, self.y-100, 100, 200)
-        self.hp = 500
-        self.maxhp = 500
+        self.hp = 100
+        self.maxhp = 100
         self.healthRect = (self.x - 10, self.y - 30, 20, 160)
         self.bulls = []
         self.range = 200
