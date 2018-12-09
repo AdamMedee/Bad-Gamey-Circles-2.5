@@ -3,7 +3,7 @@ from __future__ import print_function
 from menu import *
 from help import *
 from gameA import *
-from gameB import *
+#from gameB import *
 from math import *
 from random import *
 
@@ -22,7 +22,7 @@ while running:
         curScreen = dispOptions()
 
     elif curScreen == "game":
-        curScreen = dispGameB() and dispGameB()
+        curScreen = dispGameA() and dispGameB()
 
     elif curScreen == "end":
         pass

@@ -157,7 +157,7 @@ class TRectangle:
         self.col = (0, 0, 255) if team == "A" else (255, 0, 0)
 
     def draw(self, screen):
-        draw.rect(screen, self.col, self.rect, 3)
+        draw.rect(screen, self.col, self.rect, 0)
 
     def update(self, screen, empty, enemyList):
         self.draw(screen)
@@ -173,7 +173,7 @@ class THexagon:
         self.maxCooldown = 200
         self.dmg = 75
         self.invinc = 0
-        self.cost = 10
+        self.cost = 12
         self.range = 250
         self.speed = 1
         self.team = team
@@ -409,9 +409,9 @@ class TSpinner:
         self.hp = 20
         self.rect = Rect(x - 30, y - 30, 60, 60)
         self.invinc = []
-        self.dmg = 10
+        self.dmg = 80
         self.cost = 6
-        self.speed = 5
+        self.speed = 8
         self.team = team
         self.col = (0, 0, 255) if team == "A" else (255, 0, 0)
 
@@ -570,6 +570,19 @@ class Base:
         self.hp = 500
         self.maxhp = 500
         self.healthRect = (self.x - 10, self.y - 30, 20, 160)
+        self.bulls = []
+        self.range = 200
+        self.dmg = 2
+        self.cooldown = 0
+        self.maxCooldown = 30
+
+    def attack(self, target):
+        if self.cooldown <= 0:
+            dx = target.x - self.x
+            dy = target.y - self.y
+            ang = atan2(dy, dx)
+            self.bulls.append([self.x, self.y, 6*cos(ang), 6*sin(ang), 120])
+            self.cooldown = self.maxCooldown
 
     def draw(self, screen):
         draw.rect(screen, self.col, self.rect, 0)
@@ -577,6 +590,30 @@ class Base:
         draw.rect(screen, (50, 100, 50), (self.x - 10, self.y - 80, 20, 160), 2)
 
     def update(self, screen, empty, enemyList):
+        self.cooldown = max(0, self.cooldown-1)
+        tx, ty = 0, 0
+        m = 999999
+        target = None
+        for b in range(len(self.bulls) - 1, -1, -1):
+            self.bulls[b][0] += self.bulls[b][2]
+            self.bulls[b][1] += self.bulls[b][3]
+            self.bulls[b][4] -= 1
+            draw.circle(screen, self.col, (int(self.bulls[b][0]), int(self.bulls[b][1])), 12, 0)
+            if not Rect(0, 0, 1440, 720).collidepoint(self.bulls[b][0], self.bulls[b][1]) or self.bulls[b][4] <= 0:
+                del self.bulls[b]
+        for enemy in enemyList:
+            for b in range(len(self.bulls)-1, -1, -1):
+                if hypot(self.bulls[b][0]-enemy.x, self.bulls[b][1]-enemy.y) < 4:
+                    del self.bulls[b]
+                    enemy.hp -= self.dmg
+            if hypot(enemy.x - self.x, enemy.y - self.y) < m:
+                m = hypot(enemy.x - self.x, enemy.y - self.y)
+                tx, ty = (enemy.x, enemy.y)
+                if hypot(enemy.x - self.x, enemy.y - self.y) < self.range:
+                    target = enemy
+        if target is not None:
+            self.attack(target)
+
         self.draw(screen)
 
 
