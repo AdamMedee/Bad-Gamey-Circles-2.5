@@ -185,9 +185,13 @@ def dispGameA():
         for i in range(len(allyList)-1, -1, -1):
             if allyList[i].hp <= 0:
                 del allyList[i]
+                if i == 0:
+                    print("LOSE")
         for i in range(len(enemyList)-1, -1, -1):
             if enemyList[i].hp <= 0:
                 del enemyList[i]
+                if i == 0:
+                    print("WIN")
 
 
 
@@ -207,9 +211,6 @@ def dispGameA():
         elif BSquare.clicked:
             curSRect = TSquareR
             curSelected = TSquare
-        #elif BPent.clicked:
-            #curSRect = TPentR
-            #curSelected = TPentagon
         elif BHex.clicked:
             curSRect = THexR
             curSelected = THexagon
